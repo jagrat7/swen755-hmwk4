@@ -20,7 +20,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     })
     .then(data => {
         localStorage.setItem('token', data.token);
-        window.location.href = 'task.html';
+        window.location.href = 'userInfo.html';
     })
     .catch(error => {
         document.getElementById('errorMessage').textContent = error.message;

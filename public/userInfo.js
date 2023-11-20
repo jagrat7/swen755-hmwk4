@@ -24,11 +24,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('logoutButton').addEventListener('click', function() {
+        logout()
         localStorage.removeItem('token');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     });
+    const logout = () => {
+        fetch('http://localhost:3000/logout', {
+            method: 'GET',
 
+        })
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+
+    }
     function fetchAllUsers(token) {
+
         fetch('http://localhost:3000/users', {
             method: 'GET',
             headers: {

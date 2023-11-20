@@ -65,26 +65,6 @@ const authorizeUser = (req, res, next) => {
 };
 
 
-app.get('/task', authorizeUser, (req, res) => {
-  if (req.user.role === 'admin') {
-    res.json({ message: 'Task completed successfully' });
-  } else {
-    res.status(403).json({ message: 'Forbidden' });
-  }
-});
-
-app.get('/users/:id', authorizeUser, (req, res) => {
-  const user = users.find(u => u.id === parseInt(req.params.id));
-  if (req.user.role === 'user' && req.user.userId !== user.id) {
-    return res.status(403).json({ message: 'Forbidden' });
-  }
-  if (req.user.role === 'admin' || req.user.userId === user.id) {
-    res.json(user);
-  } else {
-    res.status(401).json({ message: 'Unauthorized' });
-  }
-});
-
 app.get('/current-user', authorizeUser, (req, res) => {
   const user = users.find(u => u.id === req.user.userId);
   if (!user) {
@@ -100,10 +80,11 @@ app.get('/users', authorizeUser, (req, res) => {
   const userList = users.map(u => ({ id: u.id, username: u.username, role: u.role }));
   res.json(userList);
 });
+app.get('/logout', authorizeUser, (req, res) => {
+  req.logout()
 
-app.get('/protected-route', authorizeUser, (req, res) => {
-  res.json({ message: "This is a protected route.", user: req.user });
-});
+})
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
