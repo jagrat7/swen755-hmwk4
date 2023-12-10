@@ -13,9 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const userInfoDisplay = `Username: ${user.username}, Role: ${user.role}`;
             document.getElementById('userInfoResult').innerText = userInfoDisplay;
 
-            if (user.role === 'admin') {
-                fetchAllUsers(token);
-            }
+            fetchAllUsers(token);
         })
         .catch(error => {
             console.error('Error:', error);

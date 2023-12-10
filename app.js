@@ -74,7 +74,7 @@ app.get('/current-user', authorizeUser, (req, res) => {
 });
 
 app.get('/users', authorizeUser, (req, res) => {
-  if (req.user.role !== 'admin') {
+  if (req.user.role !== 'admin1') {   //ERORR HERE !!!!
     return res.status(403).json({ message: 'Forbidden' });
   }
   const userList = users.map(u => ({ id: u.id, username: u.username, role: u.role }));
