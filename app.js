@@ -1,8 +1,14 @@
-import express from 'express';
-import session from 'express-session';
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import jwt from 'jsonwebtoken';
+// import express from 'express';
+// import session from 'express-session';
+// import passport from 'passport';
+// import { Strategy as LocalStrategy } from 'passport-local';
+// import jwt from 'jsonwebtoken';
+
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy; // Modify the import for LocalStrategy
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -41,6 +47,7 @@ passport.deserializeUser((id, done) => {
 app.post('/login', passport.authenticate('local'), (req, res) => {
   const user = req.user;
   const token = jwt.sign({ userId: user.id, role: user.role }, 'your-secret-key');
+
   res.json({ token });
 });
 
@@ -73,13 +80,21 @@ app.get('/current-user', authorizeUser, (req, res) => {
   res.json({ username: user.username, role: user.role });
 });
 
+// app.get('/users', authorizeUser, (req, res) => {
+//   if (req.user.role !== 'admin') {   //ERORR HERE !!!!
+//     return res.status(403).json({ message: 'Forbidden' });
+//   }
+//   const userList = users.map(u => ({ id: u.id, username: u.username, role: u.role }));
+//   res.json(userList);
+// });
 app.get('/users', authorizeUser, (req, res) => {
-  if (req.user.role !== 'admin1') {   //ERORR HERE !!!!
-    return res.status(403).json({ message: 'Forbidden' });
+  if (req.user.role !== 'admin') {   //ERORR HERE !!!!
+    const userList = users.map(u => ({ id: u.id, username: u.username, role: u.role }));
+    return res.json(userList);
   }
-  const userList = users.map(u => ({ id: u.id, username: u.username, role: u.role }));
-  res.json(userList);
+  return res.status(403).json({ message: 'Forbidden' });
 });
+
 app.get('/logout', authorizeUser, (req, res) => {
   req.logout()
 
@@ -87,6 +102,9 @@ app.get('/logout', authorizeUser, (req, res) => {
 
 
 const PORT = 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+module.exports = { app, server };
