@@ -31,7 +31,6 @@ describe('Authentication Test', () => {
         .post('/login')
         .send({ username: 'user', password: 'password' });
 
-      console.log(loginResponse);
 
       expect(loginResponse.statusCode).toBe(200); 
       expect(loginResponse.body.token).toBeDefined(); 
